@@ -1,7 +1,0 @@
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - 74472 - LOGS_CAPTURED - Started capturing logs in process (pid: 74472).
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - 74472 - processed_data - STEP_START - Started execution of step "processed_data".
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - 74472 - processed_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - processed_data - Writing file at: /Users/garretteastham/dev/openconjecture/sandbox/dagster-sandbox/quickstart/tmp20vupxw_/storage/processed_data using PickledObjectFilesystemIOManager...
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - 74472 - processed_data - ASSET_MATERIALIZATION - Materialized value processed_data.
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - 74472 - processed_data - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
-[32m2025-01-27 10:50:55 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 0be57db7-c9e7-419d-acb8-524e464debbd - 74472 - processed_data - STEP_SUCCESS - Finished execution of step "processed_data" in 31ms.
