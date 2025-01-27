@@ -1,0 +1,5 @@
+[32m2025-01-27 13:25:32 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2e623ead-4c28-413b-b53b-84d54d05475e - 66200 - LOGS_CAPTURED - Started capturing logs in process (pid: 66200).
+[32m2025-01-27 13:25:32 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2e623ead-4c28-413b-b53b-84d54d05475e - 66200 - monthly_sales_performance - STEP_START - Started execution of step "monthly_sales_performance".
+[32m2025-01-27 13:25:33 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2e623ead-4c28-413b-b53b-84d54d05475e - 66200 - monthly_sales_performance - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+[32m2025-01-27 13:25:33 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2e623ead-4c28-413b-b53b-84d54d05475e - 66200 - monthly_sales_performance - ASSET_MATERIALIZATION - Materialized value monthly_sales_performance.
+[32m2025-01-27 13:25:33 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2e623ead-4c28-413b-b53b-84d54d05475e - 66200 - monthly_sales_performance - STEP_SUCCESS - Finished execution of step "monthly_sales_performance" in 250ms.
