@@ -1,0 +1,5 @@
+[32m2025-01-27 13:27:52 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 1e549d45-e401-473a-a498-20221c7d706b - 70822 - LOGS_CAPTURED - Started capturing logs in process (pid: 70822).
+[32m2025-01-27 13:27:52 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 1e549d45-e401-473a-a498-20221c7d706b - 70822 - joined_data_missing_dimension_check - STEP_START - Started execution of step "joined_data_missing_dimension_check".
+[32m2025-01-27 13:27:52 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 1e549d45-e401-473a-a498-20221c7d706b - 70822 - joined_data_missing_dimension_check - ASSET_CHECK_EVALUATION - ASSET_CHECK_EVALUATION for step joined_data_missing_dimension_check
+[32m2025-01-27 13:27:52 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 1e549d45-e401-473a-a498-20221c7d706b - 70822 - joined_data_missing_dimension_check - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+[32m2025-01-27 13:27:52 -0600[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 1e549d45-e401-473a-a498-20221c7d706b - 70822 - joined_data_missing_dimension_check - STEP_SUCCESS - Finished execution of step "joined_data_missing_dimension_check" in 49ms.
