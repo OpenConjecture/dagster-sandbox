@@ -259,6 +259,108 @@ def asset_b(asset_a):
     return asset_a + 1
 ```
 
+## Storage Architecture
+
+Dagster's metadata storage is a crucial component of the system. By default, Dagster uses SQLite for metadata storage, but it can be configured to use PostgreSQL for production deployments. Let's explore the different types of storage:
+
+```mermaid
+classDiagram
+    class DagsterInstance {
+        +run_storage
+        +event_log_storage
+        +schedule_storage
+        +compute_log_manager
+    }
+    
+    class RunStorage {
+        +SQLite/PostgreSQL
+        -store_run_records()
+        -get_run_by_id()
+        -get_runs()
+    }
+    
+    class EventLogStorage {
+        +SQLite/PostgreSQL
+        -store_event()
+        -get_logs_for_run()
+        -get_stats_for_run()
+    }
+    
+    class ScheduleStorage {
+        +SQLite/PostgreSQL
+        -store_schedule_tick()
+        -get_schedule_ticks()
+    }
+    
+    class ComputeLogManager {
+        +Local filesystem
+        -store_compute_logs()
+        -get_compute_logs()
+    }
+    
+    DagsterInstance --> RunStorage
+    DagsterInstance --> EventLogStorage
+    DagsterInstance --> ScheduleStorage
+    DagsterInstance --> ComputeLogManager
+```
+
+### Storage Components
+
+1. **Run Storage**
+   - Stores metadata about pipeline runs
+   - Records run status, tags, and configuration
+   - Default location: `$DAGSTER_HOME/history/runs.db`
+
+2. **Event Log Storage**
+   - Stores detailed event logs for each run
+   - Includes materialization events, asset records
+   - Default location: `$DAGSTER_HOME/history/runs/`
+
+3. **Schedule Storage**
+   - Stores schedule and sensor state
+   - Maintains tick history and status
+   - Default location: `$DAGSTER_HOME/schedules/`
+
+4. **Compute Log Manager**
+   - Stores stdout/stderr from computations
+   - Managed on the filesystem
+   - Default location: `$DAGSTER_HOME/compute_logs/`
+
+### Configuring Storage
+
+To use PostgreSQL instead of SQLite (recommended for production):
+
+```python
+from dagster import DagsterInstance
+from dagster.core.storage.runs import PostgresRunStorage
+from dagster.core.storage.event_log import PostgresEventLogStorage
+from dagster.core.storage.schedules import PostgresScheduleStorage
+
+instance = DagsterInstance.get(
+    postgres_url="postgresql://user:password@localhost:5432/dagster",
+    run_storage=PostgresRunStorage(postgres_url),
+    event_log_storage=PostgresEventLogStorage(postgres_url),
+    schedule_storage=PostgresScheduleStorage(postgres_url)
+)
+```
+
+### Best Practices for Storage
+
+1. **Production Deployments**
+   - Use PostgreSQL for better performance and reliability
+   - Set up proper backup procedures
+   - Monitor database size and performance
+
+2. **Development Environment**
+   - SQLite is sufficient for local development
+   - Keep DAGSTER_HOME in version control
+   - Regular cleanup of old runs
+
+3. **Scaling Considerations**
+   - Monitor event log growth
+   - Implement retention policies
+   - Consider partitioned storage for large deployments
+
 ## Advanced Topics
 
 ### Custom Executors
