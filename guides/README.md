@@ -361,6 +361,170 @@ instance = DagsterInstance.get(
    - Implement retention policies
    - Consider partitioned storage for large deployments
 
+## Execution Architecture and Scaling
+
+Dagster provides multiple options for where and how computation happens. The execution architecture can be configured to run locally, in containers, on serverless infrastructure, or in distributed environments.
+
+```mermaid
+flowchart TD
+    subgraph "Local Development"
+        A[Dagster Webserver] --> B[Local Runner]
+        B --> C[Local Python Process]
+    end
+    
+    subgraph "Kubernetes Deployment"
+        D[Dagster Webserver] --> E[K8s Launcher]
+        E --> F[K8s Job]
+        E --> G[K8s Job]
+        E --> H[K8s Job]
+    end
+    
+    subgraph "Cloud Functions"
+        I[Dagster Webserver] --> J[Cloud Launcher]
+        J --> K[Lambda/Cloud Function]
+        J --> L[Lambda/Cloud Function]
+        J --> M[Lambda/Cloud Function]
+    end
+    
+    subgraph "Celery Cluster"
+        N[Dagster Webserver] --> O[Celery Launcher]
+        O --> P[Celery Worker]
+        O --> Q[Celery Worker]
+        O --> R[Celery Worker]
+    end
+```
+
+### Execution Options
+
+1. **Local Execution (Default)**
+   ```python
+   from dagster import Definitions, in_process_executor
+   
+   defs = Definitions(
+       assets=[my_asset],
+       executor=in_process_executor
+   )
+   ```
+
+2. **Kubernetes Execution**
+   ```python
+   from dagster_k8s import k8s_job_executor
+   
+   defs = Definitions(
+       assets=[my_asset],
+       executor=k8s_job_executor.configured({
+           "job_namespace": "dagster",
+           "job_image": "my-dagster-image:latest",
+           "image_pull_policy": "Always"
+       })
+   )
+   ```
+
+3. **Serverless Execution (AWS Lambda Example)**
+   ```python
+   from dagster_aws.lambda_ import lambda_executor
+   
+   defs = Definitions(
+       assets=[my_asset],
+       executor=lambda_executor.configured({
+           "function_name": "dagster-job-runner",
+           "region_name": "us-west-2"
+       })
+   )
+   ```
+
+4. **Celery Distributed Execution**
+   ```python
+   from dagster_celery import celery_executor
+   
+   defs = Definitions(
+       assets=[my_asset],
+       executor=celery_executor.configured({
+           "broker": "pyamqp://guest@localhost//",
+           "backend": "rpc://"
+       })
+   )
+   ```
+
+### Scaling Patterns
+
+1. **Horizontal Scaling with Kubernetes**
+   - Deploy Dagster on Kubernetes using Helm
+   - Use K8s jobs for execution
+   - Automatic scaling based on workload
+   
+   ```yaml
+   # helm values.yaml
+   dagster-user-deployments:
+     enabled: true
+     deployments:
+       - name: "my-deployment"
+         image:
+           repository: "my-dagster-image"
+           tag: "latest"
+         dagsterApiGrpcArgs:
+           - "--python-file"
+           - "/path/to/repo.py"
+   ```
+
+2. **Serverless Execution**
+   - Zero infrastructure management
+   - Pay-per-execution model
+   - Good for sporadic workloads
+   
+   Key considerations:
+   - Function timeout limits
+   - Memory constraints
+   - Cold start overhead
+
+3. **Celery Worker Clusters**
+   - Traditional distributed processing
+   - Fine-grained control over resources
+   - Good for steady-state workloads
+
+### Best Practices for Scaling
+
+1. **Resource Management**
+   ```python
+   @resource(config_schema={"worker_count": int})
+   def my_scalable_resource(context):
+       return ScalableProcessor(
+           worker_count=context.resource_config["worker_count"]
+       )
+   ```
+
+2. **Job Configuration**
+   ```python
+   @job(
+       executor_def=k8s_job_executor,
+       resource_defs={"processor": my_scalable_resource}
+   )
+   def scalable_job():
+       process_data()
+   ```
+
+3. **Monitoring and Optimization**
+   - Use tags for resource tracking
+   - Implement proper logging
+   - Monitor execution metrics
+
+### Performance Considerations
+
+1. **Memory Management**
+   - Configure resource limits
+   - Use streaming for large datasets
+   - Implement proper cleanup
+
+2. **Network Optimization**
+   - Locate compute near data
+   - Use appropriate IO managers
+   - Consider data transfer costs
+
+3. **Cost Optimization**
+   - Choose appropriate compute resources
+   - Implement auto-scaling
+   - Monitor resource utilization
+
 ## Advanced Topics
 
 ### Custom Executors
