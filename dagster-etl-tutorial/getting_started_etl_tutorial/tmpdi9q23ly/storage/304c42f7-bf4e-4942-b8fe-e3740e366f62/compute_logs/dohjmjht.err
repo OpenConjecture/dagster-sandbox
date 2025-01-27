@@ -1,5 +1,0 @@
-[32m2025-01-27 13:48:03 -0600[0m - dagster - [34mDEBUG[0m - __anonymous_asset_job_analysis_update_job - 304c42f7-bf4e-4942-b8fe-e3740e366f62 - 13032 - LOGS_CAPTURED - Started capturing logs in process (pid: 13032).
-[32m2025-01-27 13:48:03 -0600[0m - dagster - [34mDEBUG[0m - __anonymous_asset_job_analysis_update_job - 304c42f7-bf4e-4942-b8fe-e3740e366f62 - 13032 - sales_reps - STEP_START - Started execution of step "sales_reps".
-[32m2025-01-27 13:48:05 -0600[0m - dagster - [34mDEBUG[0m - __anonymous_asset_job_analysis_update_job - 304c42f7-bf4e-4942-b8fe-e3740e366f62 - 13032 - sales_reps - STEP_OUTPUT - Yielded output "result" of type "Nothing". (Type check passed).
-[32m2025-01-27 13:48:05 -0600[0m - dagster - [34mDEBUG[0m - __anonymous_asset_job_analysis_update_job - 304c42f7-bf4e-4942-b8fe-e3740e366f62 - 13032 - sales_reps - ASSET_MATERIALIZATION - Materialized value sales_reps.
-[32m2025-01-27 13:48:05 -0600[0m - dagster - [34mDEBUG[0m - __anonymous_asset_job_analysis_update_job - 304c42f7-bf4e-4942-b8fe-e3740e366f62 - 13032 - sales_reps - STEP_SUCCESS - Finished execution of step "sales_reps" in 1.82s.
