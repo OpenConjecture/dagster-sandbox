@@ -287,6 +287,88 @@ def product_performance(context: dg.AssetExecutionContext, duckdb: DuckDBResourc
         }
     )
 
+
+# [6.c] Adhoc Request
+class AdhocRequestConfig(dg.Config):
+    department: str
+    product: str
+    start_date: str
+    end_date: str
+
+
+@dg.asset(
+    deps=["joined_data"],
+    compute_kind="python",
+)
+def adhoc_request(
+    config: AdhocRequestConfig, duckdb: DuckDBResource
+) -> dg.MaterializeResult:
+    query = f"""
+        select
+            department,
+            rep_name,
+            product_name,
+            sum(dollar_amount) as total_sales
+        from joined_data
+        where date >= '{config.start_date}'
+        and date < '{config.end_date}'
+        and department = '{config.department}'
+        and product_name = '{config.product}'
+        group by
+            department,
+            rep_name,
+            product_name
+    """
+
+    with duckdb.get_connection() as conn:
+        preview_df = conn.execute(query).fetchdf()
+
+    return dg.MaterializeResult(
+        metadata={"preview": dg.MetadataValue.md(preview_df.to_markdown(index=False))}
+    )
+
+adhoc_request_job = dg.define_asset_job(
+    name="adhoc_request_job",
+    selection=dg.AssetSelection.assets("adhoc_request"),
+)
+
+
+@dg.sensor(job=adhoc_request_job)
+def adhoc_request_sensor(context: dg.SensorEvaluationContext):
+    PATH_TO_REQUESTS = os.path.join(os.path.dirname(__file__), "../", "data/requests")
+
+    previous_state = json.loads(context.cursor) if context.cursor else {}
+    current_state = {}
+    runs_to_request = []
+
+    for filename in os.listdir(PATH_TO_REQUESTS):
+        file_path = os.path.join(PATH_TO_REQUESTS, filename)
+        if filename.endswith(".json") and os.path.isfile(file_path):
+            last_modified = os.path.getmtime(file_path)
+
+            current_state[filename] = last_modified
+
+            # if the file is new or has been modified since the last run, add it to the request queue
+            if (
+                filename not in previous_state
+                or previous_state[filename] != last_modified
+            ):
+                with open(file_path) as f:
+                    request_config = json.load(f)
+
+                runs_to_request.append(
+                    dg.RunRequest(
+                        run_key=f"adhoc_request_{filename}_{last_modified}",
+                        run_config={
+                            "ops": {"adhoc_request": {"config": {**request_config}}}
+                        },
+                    )
+                )
+
+    return dg.SensorResult(
+        run_requests=runs_to_request, cursor=json.dumps(current_state)
+    )
+
 # [7] Schedule Definition - Cron-based Schedule
 weekly_update_schedule = dg.ScheduleDefinition(
     name="analysis_update_job",
@@ -302,9 +384,12 @@ defs = dg.Definitions(
         sales_data,
         joined_data,
         monthly_sales_performance,
-        product_performance
+        product_performance,
+        adhoc_request,
     ],
     asset_checks=[missing_dimension_check],
-    resources={"duckdb": DuckDBResource(database="data/mydb.duckdb")},
-    schedules=[weekly_update_schedule]
+    schedules=[weekly_update_schedule],
+    jobs=[adhoc_request_job],
+    sensors=[adhoc_request_sensor],
+    resources={"duckdb": DuckDBResource(database="data/mydb.duckdb")}
 )
