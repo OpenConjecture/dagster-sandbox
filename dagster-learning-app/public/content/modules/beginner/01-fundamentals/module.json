@@ -32,6 +32,13 @@
       "type": "hands-on",
       "estimatedMinutes": 60,
       "file": "sections/03-first-pipeline.md"
+    },
+    {
+      "id": "04-interactive-demo",
+      "title": "Interactive Learning Demo",
+      "type": "theory",
+      "estimatedMinutes": 15,
+      "file": "sections/04-interactive-demo.md"
     }
   ]
 }

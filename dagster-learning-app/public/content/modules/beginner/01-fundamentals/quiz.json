@@ -1,0 +1,55 @@
+{
+  "id": "fundamentals-quiz",
+  "title": "Dagster Fundamentals Quiz",
+  "description": "Test your understanding of Dagster's core concepts",
+  "passingScore": 80,
+  "timeLimit": 15,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple-choice",
+      "question": "What is the primary building block in Dagster?",
+      "options": [
+        "Tasks",
+        "Assets", 
+        "Workflows",
+        "Pipelines"
+      ],
+      "correctAnswer": 1,
+      "points": 10,
+      "explanation": "Assets are the core building blocks in Dagster. They represent the data and ML models you want to exist in your system."
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "question": "In Dagster, you define HOW to compute data assets, not WHAT assets should exist.",
+      "correctAnswer": false,
+      "points": 10,
+      "explanation": "This is false. Dagster takes an asset-centric approach where you define WHAT data assets should exist, and Dagster handles the orchestration of HOW to compute them."
+    },
+    {
+      "id": "q3",
+      "type": "code-completion",
+      "question": "Complete the code to create a basic Dagster asset:",
+      "codeTemplate": "from dagster import ___\n\n@___\ndef my_data():\n    return 'data'",
+      "blanks": ["asset", "asset"],
+      "points": 20,
+      "explanation": "You need to import 'asset' from dagster and use the @asset decorator to define an asset."
+    },
+    {
+      "id": "q4",
+      "type": "multiple-select",
+      "question": "Which of the following are key features of Dagster? (Select all that apply)",
+      "options": [
+        "Software-defined assets",
+        "Built-in testing capabilities",
+        "Automatic scaling to 1000+ nodes",
+        "Type safety and validation",
+        "Integrated observability"
+      ],
+      "correctAnswers": [0, 1, 3, 4],
+      "points": 20,
+      "explanation": "While Dagster can scale, automatic scaling to 1000+ nodes isn't a built-in feature. The other options are core features of Dagster."
+    }
+  ]
+}

@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.12",
     "@tailwindcss/postcss": "^4.1.8",
     "@types/prismjs": "^1.26.5",
+    "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.514.0",
+    "prism-react-renderer": "^2.4.1",
     "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -22,7 +25,8 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.2"
+    "remark-rehype": "^11.1.2",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

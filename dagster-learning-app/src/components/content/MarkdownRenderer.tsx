@@ -1,43 +1,76 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { remark } from 'remark';
 import html from 'remark-html';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-yaml';
-import 'prismjs/components/prism-json';
+import { CodeBlock } from '@/components/code/CodeBlock';
+import { Callout } from '@/components/interactive/Callout';
+import { QuickCheck } from '@/components/interactive/QuickCheck';
+import { Collapsible } from '@/components/interactive/Collapsible';
+import { NavigationButtons } from '@/components/interactive/NavigationButtons';
 
 interface MarkdownRendererProps {
   content: string;
+  components?: Record<string, React.ComponentType<any>>;
 }
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  const [htmlContent, setHtmlContent] = useState('');
-
-  useEffect(() => {
-    async function processMarkdown() {
-      const result = await remark()
-        .use(html, { sanitize: false })
-        .process(content);
-      
-      setHtmlContent(result.toString());
-    }
-
-    processMarkdown();
+export function MarkdownRenderer({ content, components = {} }: MarkdownRendererProps) {
+  const processedContent = useMemo(() => {
+    // Process markdown to HTML
+    const result = remark().use(html).processSync(content);
+    return result.toString();
   }, [content]);
 
-  useEffect(() => {
-    // Highlight code blocks after content is rendered
-    if (htmlContent) {
-      Prism.highlightAll();
-    }
-  }, [htmlContent]);
+  // Parse custom components
+  const renderContent = () => {
+    // This is a simplified version - in production, use a proper MDX parser
+    const parts = processedContent.split(/(<[A-Z]\w+[^>]*>[\s\S]*?<\/[A-Z]\w+>)/);
+    
+    return parts.map((part, index) => {
+      // Check if this part is a custom component
+      const componentMatch = part.match(/<([A-Z]\w+)([^>]*)>([\s\S]*?)<\/\1>/);
+      
+      if (componentMatch) {
+        const [, componentName, propsString, children] = componentMatch;
+        
+        // Parse props (simplified)
+        const props: any = {};
+        const propsRegex = /(\w+)=["']([^"']+)["']/g;
+        let match;
+        while ((match = propsRegex.exec(propsString))) {
+          props[match[1]] = match[2];
+        }
 
-  return (
-    <div 
-      className="prose prose-lg max-w-none prose-headings:font-semibold prose-code:font-mono prose-code:text-sm prose-pre:bg-gray-900"
-      dangerouslySetInnerHTML={{ __html: htmlContent }}
-    />
-  );
+        // Handle built-in components
+        switch (componentName) {
+          case 'CodeBlock':
+            return <CodeBlock key={index} {...props} code={children.trim()} />;
+          case 'Callout':
+            return <Callout key={index} {...props}>{children}</Callout>;
+          case 'QuickCheck':
+            return <QuickCheck key={index} {...props} />;
+          case 'Collapsible':
+            return <Collapsible key={index} {...props}>{children}</Collapsible>;
+          case 'NavigationButtons':
+            return <NavigationButtons key={index} {...props} />;
+          default:
+            // Check custom components
+            const Component = components[componentName];
+            if (Component) {
+              return <Component key={index} {...props}>{children}</Component>;
+            }
+            return <div key={index}>{part}</div>;
+        }
+      }
+
+      // Regular HTML content
+      return (
+        <div 
+          key={index} 
+          className="prose prose-lg max-w-none dark:prose-invert"
+          dangerouslySetInnerHTML={{ __html: part }}
+        />
+      );
+    });
+  };
+
+  return <div>{renderContent()}</div>;
 }

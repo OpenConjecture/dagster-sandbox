@@ -9,7 +9,9 @@ interface ModuleCardProps {
 }
 
 export function ModuleCard({ module, progress, isLocked = false, onClick }: ModuleCardProps) {
-  const percentComplete = progress?.percentComplete || 0;
+  const percentComplete = progress 
+    ? Math.round((progress.completedSections.length / module.sections.length) * 100)
+    : 0;
 
   return (
     <div

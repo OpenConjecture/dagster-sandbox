@@ -32,9 +32,30 @@ export interface Section {
   content?: string;
 }
 
+export interface UserProgress {
+  userId: string;
+  startedAt: string;
+  lastActiveAt: string;
+  completedModules: string[];
+  moduleProgress: Record<string, ModuleProgress>;
+  totalTimeSpent: number; // in seconds
+  currentStreak: number;
+}
+
 export interface ModuleProgress {
   moduleId: string;
+  startedAt: string;
   completedSections: string[];
-  currentSection: string;
-  percentComplete: number;
+  currentSectionId: string;
+  quizScore?: number;
+  timeSpent: number; // in seconds
+  lastAccessedAt: string;
+}
+
+export interface UserPreferences {
+  theme: 'light' | 'dark' | 'system';
+  fontSize: 'small' | 'medium' | 'large';
+  codeTheme: 'vs-dark' | 'dracula' | 'github';
+  reduceMotion: boolean;
+  autoPlayVideos: boolean;
 }
