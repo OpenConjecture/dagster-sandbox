@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2024-01-15",
+  "levels": [
+    {
+      "id": "beginner",
+      "title": "Beginner Track",
+      "description": "Start your Dagster journey from the basics",
+      "estimatedHours": 40,
+      "modules": ["01-fundamentals", "02-working-with-assets"]
+    },
+    {
+      "id": "intermediate",
+      "title": "Intermediate Track",
+      "description": "Build production-ready data pipelines",
+      "estimatedHours": 60,
+      "modules": ["03-advanced-patterns", "04-deployment"]
+    }
+  ]
+}

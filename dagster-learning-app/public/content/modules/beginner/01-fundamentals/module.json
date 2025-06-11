@@ -1,0 +1,37 @@
+{
+  "id": "01-fundamentals",
+  "title": "Dagster Fundamentals",
+  "description": "Learn the core concepts of Dagster including assets, ops, jobs, and schedules.",
+  "estimatedHours": 4,
+  "prerequisites": [],
+  "learningObjectives": [
+    "Understand Dagster's core concepts and philosophy",
+    "Build your first Dagster pipeline",
+    "Work with software-defined assets",
+    "Configure and run jobs",
+    "Set up basic scheduling"
+  ],
+  "sections": [
+    {
+      "id": "01-introduction",
+      "title": "Introduction to Dagster",
+      "type": "theory",
+      "estimatedMinutes": 30,
+      "file": "sections/01-introduction.md"
+    },
+    {
+      "id": "02-core-concepts",
+      "title": "Core Concepts",
+      "type": "theory",
+      "estimatedMinutes": 45,
+      "file": "sections/02-core-concepts.md"
+    },
+    {
+      "id": "03-first-pipeline",
+      "title": "Building Your First Pipeline",
+      "type": "hands-on",
+      "estimatedMinutes": 60,
+      "file": "sections/03-first-pipeline.md"
+    }
+  ]
+}
